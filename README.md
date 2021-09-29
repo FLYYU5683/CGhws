@@ -6,4 +6,4 @@
     * ## 班級座號：I2A15
 ***
 ### 這是我的信箱：`woody90514@gmail.com`
-### [這是我github的index](https://flyyu5683.github.io/CGhws/index_1.html)
+### [這是我github的index](https://flyyu5683.github.io/CGhws/index1.html)
