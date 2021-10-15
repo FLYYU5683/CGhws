@@ -3,22 +3,23 @@
 <style>
 #info {
   position: absolute;
-  top: 0px;
+  top: 20px;
   width: 100%;
-  padding: 10px;
+
   text-align: center;
   color: #ffff00
 }
 
 body {
-  overflow: hidden;
+ overflow: hidden;
 }
 </style>
 <body>
 <div id = "info"><br>
 <button id = 'toggle' style = "width: 20%">Start</button>
-<button id = 'turnways' style = "width: 20%">Switch</button>
-
+<button id = 'turnways' style = "width: 20%">Smooth</button><br>
+<button id = 'count10' style = "width: 100px">+10sec</button>
+<button id = 'count' style = "width: 100px">+1sec</button>
 </div>
 <script src="https://threejs.org/build/three.min.js"></script>
 <script
@@ -26,8 +27,6 @@ body {
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
 <script>
-javascript: (function () { var script = document.createElement('script'); script.onload = function () { var stats = new Stats(); document.body.appendChild(stats.dom); requestAnimationFrame(function loop() { stats.update(); requestAnimationFrame(loop) }); }; script.src = 'https://mrdoob.github.io/stats.js/build/stats.min.js'; document.head.appendChild(script); })()
-
 $("#toggle").click(function(){
 	turn = !turn;
 	if(turn)
@@ -39,16 +38,30 @@ $("#toggle").click(function(){
 $("#turnways").click(function(){
 	ways = !ways;
 	if(ways)
-	$("#turnways").text("smooth");
+		$("#turnways").text("Smooth");
 	else
-	$("#turnways").text("SixDegs");
+		$("#turnways").text("SixDegs");
+	angle = 0;
 })
 
+$("#count10").click(function(){
+	angle += 10*6/180*Math.PI;
+})
+
+$("#count").click(function(){
+	angle += 6/180*Math.PI;
+})
+
+
+
 var camera, scene, renderer;
-var angle_1 = angle_2 = 0;
+var angle = 0;
 var turn = false;
 var ways = true;
 var groups = [];
+var count = 0;
+var key = true;
+var TimeOut;
 
 init();
 animate();
@@ -70,7 +83,7 @@ function init() {
 	window.addEventListener('resize', onWindowResize, false);
   
 	scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 1000);
+	camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 10000);
 	camera.position.z = 120;
 
 	/////////////////////////////////////////////////////////
@@ -83,9 +96,6 @@ function init() {
 	material = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
 	plane = new THREE.Mesh( geometry, material );
 	plane.position.y = 20;
-	
-	plane1 = new THREE.Mesh( geometry, material );
-	plane1.position.y = 20;
 	
 	const x = 0, y = 0;
 
@@ -104,30 +114,25 @@ function init() {
 	mesh = new THREE.Mesh( geometry, material ) ;
 	mesh.position.x = -5;
 	mesh.position.y = 30;
-	
-	mesh1 = new THREE.Mesh( geometry, material ) ;
-	mesh1.position.x = -5;
-	mesh1.position.y = 30;
-	
+
 	groups[0].valueOf().add(plane,mesh);
-	groups[1].valueOf().add(plane1,mesh1);
 	
 	scene.add(groups[0]);
-	scene.add(groups[1]);	
 	
 	clock = new THREE.Clock();
-	clock.getDelta();
 	
+	clock.getDelta();
 	setTimeout(turnSixDegs, 0);
-  
-  
-  
   
 }
 	function turnSixDegs(){
-		if(turn)
-			angle_2 += 6/180*Math.PI;
+		if(turn && angle > 2.7755575615628914e-17 && !ways)
+			angle -= 6/180*Math.PI;
 		setTimeout(turnSixDegs,1000);
+	}
+	function countPlus(){
+		count++;
+		TimeOut = setTimeout(countPlus,1000);
 	}
 
 function onWindowResize() {
@@ -137,29 +142,28 @@ function onWindowResize() {
 }
 
 function animate() {
+	
 
 	var dt = clock.getDelta();
-	if(turn)
-	{
-		angle_1 += 2 * Math.PI * dt /60;
+	
+	if(turn && ways && angle > 2.7755575615628914e-17)
+		angle -= 2 * Math.PI * dt /60;
+	if(angle <= 2.7755575615628914e-17){
+		if(key)
+			setTimeout(countPlus,0);
+		key = false;
 	}
-	if(ways)
-	{
-		groups[0].valueOf().visible = true;
-		groups[1].valueOf().visible = false;
+	else{
+		clearTimeout(TimeOut);
+		key = true;
+		count = 0;
 	}
-	else
-	{
-		groups[0].valueOf().visible = false;
-		groups[1].valueOf().visible = true;
+	if(count >= 8){
+		console.log("alarm");
 	}
 	
-	
-	groups[0].valueOf().position.set(0.6*Math.sin(angle_1),0.6*Math.cos(angle_1),0);
-	groups[0].valueOf().rotation.z = -angle_1;
-	
-	groups[1].valueOf().position.set(0.6*Math.sin(angle_2),0.6*Math.cos(angle_2),0);
-	groups[1].valueOf().rotation.z = -angle_2;
+	groups[0].valueOf().position.set(0.6*Math.sin(angle),0.6*Math.cos(angle),0);
+	groups[0].valueOf().rotation.z = -angle;
 	
 	requestAnimationFrame(animate);
 	render();
