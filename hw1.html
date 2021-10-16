@@ -58,6 +58,7 @@ $("#toggle").mousedown(function(e) {
     pressed[e.which] = e.timeStamp;
 	time += clock.getDelta();
 	
+<<<<<<< HEAD
 
 });
     
@@ -90,6 +91,40 @@ $("#toggle").mouseup(function(e) {
 
 var soundTrack;
 
+=======
+
+});
+    
+$("#toggle").mouseup(function(e) {
+
+    if ( !pressed[e.which] ) return;
+		var duration = ( e.timeStamp - pressed[e.which] ) / 1000;
+    pressed[e.which] = 0;
+	console.log(duration);
+	
+	start = true;
+	turn = !turn;
+	if( duration >= 2){
+		soundTrack.pause()
+			console.log("yes");
+		start = false;
+		$("#toggle").text("Start");
+		angle = 0;
+		turn = false;
+	}
+	else{
+		if(turn)
+			$("#toggle").text("Stop");
+		else
+			$("#toggle").text("Turn");
+	}
+
+	
+});
+
+var soundTrack;
+
+>>>>>>> master
 var pressed = {};
 
 var camera, scene, renderer;
@@ -97,7 +132,11 @@ var angle = 0;
 var turn = false;
 var ways = true;
 var groups = [];
+<<<<<<< HEAD
 
+=======
+var debug = true;
+>>>>>>> master
 var count = 0;
 var key = true;
 var TimeOut;
@@ -182,6 +221,14 @@ function onWindowResize() {
 }
 
 function animate() {
+<<<<<<< HEAD
+=======
+
+	if(debug){
+		soundTrack.pause();
+		debug = false
+	}
+>>>>>>> master
 
 	var dt = clock.getDelta();
 	
