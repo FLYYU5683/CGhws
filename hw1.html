@@ -97,7 +97,7 @@ var angle = 0;
 var turn = false;
 var ways = true;
 var groups = [];
-
+var debug = true;
 var count = 0;
 var key = true;
 var TimeOut;
@@ -182,6 +182,11 @@ function onWindowResize() {
 }
 
 function animate() {
+
+	if(debug){
+		soundTrack.pause();
+		debug = false
+	}
 
 	var dt = clock.getDelta();
 	
