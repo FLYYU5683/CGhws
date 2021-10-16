@@ -15,26 +15,27 @@ body {
 }
 </style>
 <body>
+
+
+<audio id="soundtrack" autoplay loop style="display:none">
+<source src="https://flyyu5683.github.io/CGhws/alarn.mp3"  type='audio/mp3'>
+</audio>
+
 <div id = "info"><br>
 <button id = 'toggle' style = "width: 20%">Start</button>
 <button id = 'turnways' style = "width: 20%">Smooth</button><br>
 <button id = 'count10' style = "width: 100px">+10sec</button>
 <button id = 'count' style = "width: 100px">+1sec</button>
+
 </div>
+
 <script src="https://threejs.org/build/three.min.js"></script>
 <script
   src="https://code.jquery.com/jquery-3.6.0.min.js"
   integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
   crossorigin="anonymous"></script>
 <script>
-$("#toggle").click(function(){
-	turn = !turn;
-	if(turn)
-	$("#toggle").text("stop");
-	else
-	$("#toggle").text("turn");
-})
-
+//https://jyunming-chen.github.io/game3js/gameHWhelpers/sounds/KennyG.mp3
 $("#turnways").click(function(){
 	ways = !ways;
 	if(ways)
@@ -52,24 +53,63 @@ $("#count").click(function(){
 	angle += 6/180*Math.PI;
 })
 
+$("#toggle").mousedown(function(e) {
+    if ( pressed[e.which] ) return;
+    pressed[e.which] = e.timeStamp;
+	time += clock.getDelta();
+	
 
+});
+    
+$("#toggle").mouseup(function(e) {
+
+    if ( !pressed[e.which] ) return;
+		var duration = ( e.timeStamp - pressed[e.which] ) / 1000;
+    pressed[e.which] = 0;
+	console.log(duration);
+	
+	start = true;
+	turn = !turn;
+	if( duration >= 2){
+		soundTrack.pause()
+			console.log("yes");
+		start = false;
+		$("#toggle").text("Start");
+		angle = 0;
+		turn = false;
+	}
+	else{
+		if(turn)
+			$("#toggle").text("Stop");
+		else
+			$("#toggle").text("Turn");
+	}
+
+	
+});
+
+var soundTrack;
+
+var pressed = {};
 
 var camera, scene, renderer;
 var angle = 0;
 var turn = false;
 var ways = true;
 var groups = [];
+
 var count = 0;
 var key = true;
 var TimeOut;
+var start = false;
+var time = 0;
 
 init();
 animate();
-function init(){
-
-}
 
 function init() {
+	soundTrack = document.getElementById ('soundtrack');
+
 	for(var k = 0; k< 2;k++)
 		groups[k] = new THREE.Group();
 
@@ -142,15 +182,18 @@ function onWindowResize() {
 }
 
 function animate() {
-	
 
 	var dt = clock.getDelta();
 	
 	if(turn && ways && angle > 2.7755575615628914e-17)
 		angle -= 2 * Math.PI * dt /60;
-	if(angle <= 2.7755575615628914e-17){
-		if(key)
+		
+		
+	if(angle <= 2.7755575615628914e-17 && start == true){
+		if(key){
+			soundTrack.play();
 			setTimeout(countPlus,0);
+		}
 		key = false;
 	}
 	else{
@@ -158,9 +201,8 @@ function animate() {
 		key = true;
 		count = 0;
 	}
-	if(count >= 8){
-		console.log("alarm");
-	}
+	if(count >= 10)
+		soundTrack.pause();
 	
 	groups[0].valueOf().position.set(0.6*Math.sin(angle),0.6*Math.cos(angle),0);
 	groups[0].valueOf().rotation.z = -angle;
