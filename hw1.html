@@ -2,31 +2,29 @@
 <html>
 <style>
 #info {
-  position: absolute;
-  top: 20px;
-  width: 100%;
-
-  text-align: center;
-  color: #ffff00
+	position: absolute;
+	top: 20px;
+	width: 100%;
+	text-align: center;
+	color: #ffff00;
 }
-
 body {
- overflow: hidden;
+	overflow: hidden;
+	margin:0;
+	padding:0;
 }
 </style>
 <body>
-
 
 <audio id="soundtrack" autoplay loop style="display:none">
 <source src="https://flyyu5683.github.io/CGhws/alarn.mp3"  type='audio/mp3'>
 </audio>
 
 <div id = "info"><br>
-<button id = 'toggle' style = "width: 20%">Start</button>
-<button id = 'turnways' style = "width: 20%">Smooth</button><br>
-<button id = 'count10' style = "width: 100px">+10sec</button>
-<button id = 'count' style = "width: 100px">+1sec</button>
-
+<button id = 'toggle' style = "width: 5%;margin-right:25px;background-color:pink;">Start</button>
+<button id = 'turnways' style = "width: 5%;margin-right:100px;background-color:pink;">Smooth</button>
+<button id = 'count10' style = "width: 5%;margin-right:25px;background-color:pink;">+10sec</button>
+<button id = 'count' style = "width: 5%;marFgin-right:25px;background-color:pink;">+1sec</button>
 </div>
 
 <script src="https://threejs.org/build/three.min.js"></script>
@@ -143,7 +141,7 @@ function init() {
   });
 
 	renderer.setSize(window.innerWidth, window.innerHeight);
-	renderer.setClearColor(0x888888);
+	renderer.setClearColor(0x3D7878);
 	document.body.appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
   
@@ -154,13 +152,55 @@ function init() {
 	/////////////////////////////////////////////////////////
 
 	var geometry = new THREE.CircleGeometry( 50, 64 );
-	var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+	var material = new THREE.MeshBasicMaterial( { color: 0xFFFFBB } );
 	var circle = new THREE.Mesh( geometry, material );
-	scene.add( circle );
+	
+	var geometry1 = new THREE.CircleGeometry( 55, 64 );
+	var material1 = new THREE.MeshBasicMaterial( { color: 0x000000} );
+	var circle1 = new THREE.Mesh( geometry1, material1 );
+	
+	scene.add(circle1);
+	scene.add(circle);
+
+	
+	circle.position.set(0,-6,0.1);
+	circle1.position.set(0,-6,0);
+	
+	var geometry2 = new THREE.RingGeometry( 0.1, 2, 1, 1, 0, 6.3 );
+	var material2 = new THREE.MeshBasicMaterial( { color: 0x886600, side: THREE.DoubleSide } );
+	var mesh2 = new THREE.Mesh( geometry2, material2 );
+	scene.add( mesh2 );
+	mesh2.rotation.z = -0.5;
+
+	mesh2.position.set(0,40,2);
+	
+	var mesh3 = new THREE.Mesh( geometry2, material2 );
+	scene.add(mesh3);
+	mesh3.rotation.z = 0;
+	mesh3.position.set(46,-5.5,2);
+	
+	var mesh4 = new THREE.Mesh( geometry2, material2 );
+	scene.add(mesh4);
+	mesh4.rotation.z = 0.5;
+	mesh4.position.set(0,-52,2);
+	
+	var mesh5 = new THREE.Mesh( geometry2, material2 );
+	scene.add(mesh5);
+	mesh5.rotation.z = 0;
+	mesh5.rotation.y = Math.PI;
+	mesh5.position.set(-46,-5.5,2);
+	
+	
+	
+	
+	
+	
+	
 	geometry = new THREE.PlaneGeometry( 5, 40 );
-	material = new THREE.MeshBasicMaterial( {color: 0xff0000, side: THREE.DoubleSide} );
+	material = new THREE.MeshBasicMaterial( {color: 0xAA7700, side: THREE.DoubleSide} );
 	plane = new THREE.Mesh( geometry, material );
-	plane.position.y = 20;
+	plane.position.y = 10;
+	plane.position.z = 0.100001;
 	
 	const x = 0, y = 0;
 
@@ -175,15 +215,18 @@ function init() {
 	heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
 
 	geometry = new THREE.ShapeGeometry( heartShape );
-	material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+	material = new THREE.MeshBasicMaterial( { color: 0x227700 } );
 	mesh = new THREE.Mesh( geometry, material ) ;
 	mesh.position.x = -5;
-	mesh.position.y = 30;
+	mesh.position.y = 20;
+	mesh.position.z = 0.10001;
 
 	groups[0].valueOf().add(plane,mesh);
 	
-	scene.add(groups[0]);
 	
+
+	scene.add(groups[0]);
+
 	clock = new THREE.Clock();
 	
 	clock.getDelta();
@@ -234,7 +277,7 @@ function animate() {
 	if(count >= 10)
 		soundTrack.pause();
 	
-	groups[0].valueOf().position.set(0.6*Math.sin(angle),0.6*Math.cos(angle),0);
+	groups[0].valueOf().position.set(0.6*Math.sin(angle),0.6*Math.cos(angle)-5,0);
 	groups[0].valueOf().rotation.z = -angle;
 	
 	requestAnimationFrame(animate);
@@ -246,7 +289,5 @@ function render() {
 }
 
 </script>
-
-<div id="info">THREE.JS 2D Template</div>
 </body>
 </html>
