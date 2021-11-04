@@ -342,20 +342,6 @@ function initHUD() {
   cameraHUD2.position.set (0,30,0);
   cameraHUD2.up.set (0,0,-1)   // for top view
   cameraHUD2.lookAt (new THREE.Vector3())
-
-  let points = [];
-  points.push (
-    new THREE.Vector3(-10, -10, 0),
-    new THREE.Vector3(10, -10, 0),
-    new THREE.Vector3(10, 10, 0),
-    new THREE.Vector3(-10, 10, 0),
-    new THREE.Vector3(-10, -10, 0));
-  var lineGeometry = new THREE.BufferGeometry().setFromPoints (points);
-    
-  var line = new THREE.Line(lineGeometry,
-    new THREE.LineBasicMaterial({
-      color: 0xffffff
-    })); 
 }
 
 </script>
