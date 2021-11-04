@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id = "info">
+<button id = 'toggle' style = "width: 5%;margin-right:25px;background-color:pink;">Switch</button>
+</div>
+<style>
+#info {
+	position: absolute;
+	top: 20px;
+	width: 100%;
+	text-align: center;
+	color: #ffff00;
+}
+body {
+  overflow: hidden;
+}
+</style>
+<script
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+  crossorigin="anonymous"></script>
+<script type = "module">
+
+import * as THREE from "https://threejs.org/build/three.module.js";
+import { OrbitControls } from "https://threejs.org/examples/jsm/controls/OrbitControls.js";
+
+$("#toggle").click(function(){
+	toggle = !toggle;
+})
+var camera, scene, renderer;
+var cameraF,cameraT,cameraR;
+var toggle = true;
+var count = 50;
+var TimeOutM,TimeOutP; 
+var keyP = false;
+var keyM = false;
+init();
+animate();
+
+function init() {
+
+  scene = new THREE.Scene();
+  
+  var light = new THREE.PointLight( 0xffffff,1,1000 );
+  light.position.set(130, 50, 100);
+  scene.add( light );
+  
+  cameraT = new THREE.OrthographicCamera (0,130,0,-60,1,4000);
+  cameraT.position.set (0,100,0);
+  cameraT.up.set (0,0,-1); // -Z
+  cameraT.lookAt (0,0,0);
+
+  cameraF = new THREE.OrthographicCamera (0,130,50,0, 1,200);
+  cameraF.position.set (0,0,100);
+  cameraF.lookAt (0,0,0);
+  
+  cameraR = new THREE.OrthographicCamera (60,0,50,0,-200,400);
+  cameraR.position.set (-200,0,0);
+  cameraR.lookAt (0,0,0);
+  
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000);
+  camera.position.set(200,20,100);
+  
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0x888888);
+  document.body.appendChild(renderer.domElement);
+  window.addEventListener('resize', onWindowResize, false);
+
+  let controls = new OrbitControls(camera, renderer.domElement);
+
+  ////////////////////////////////////////////////////////////////
+  
+  var shape1 = new THREE.Shape();
+    shape1.moveTo(0,0);
+    shape1.lineTo(0,50);
+    shape1.lineTo(13,50);
+    shape1.lineTo(13,25);
+    shape1.lineTo(47,25);
+    shape1.lineTo(47,50);
+    shape1.lineTo(60,50);
+    shape1.lineTo(60,25);
+	shape1.absarc(70,25,10,Math.PI,Math.PI * 3 / 2, false);
+	shape1.moveTo(70,15);
+	shape1.lineTo(70,0);
+	shape1.lineTo(0,0);
+	
+  var extrudeSettings1 = {
+	steps: 1,
+	depth: 15,
+	bevelEnabled: true,
+	bevelThickness: 0,
+	bevelSize: 0,
+	bevelOffset: 0,
+	bevelSegments: 1
+  };
+  var mesh1 = new THREE.Mesh( new THREE.ExtrudeGeometry( shape1, extrudeSettings1 ), new THREE.MeshPhongMaterial({
+    color: 0x00AA00,
+	shininess: 200,
+  }));
+  scene.add(mesh1);
+  
+    var shape2 = new THREE.Shape();
+    shape2.moveTo(0,0);
+    shape2.lineTo(0,30);
+    shape2.lineTo(13,30);
+    shape2.lineTo(13,25);
+    shape2.lineTo(47,25);
+    shape2.lineTo(47,30);
+    shape2.lineTo(60,30);
+    shape2.lineTo(60,25);
+	shape2.absarc(70,25,10,Math.PI,Math.PI * 3 / 2, false);
+	shape2.moveTo(70,15);
+	shape2.lineTo(70,0);
+	shape2.lineTo(0,0);
+	
+  var extrudeSettings2 = {
+	steps: 1,
+	depth: 30,
+	bevelEnabled: true,
+	bevelThickness: 0,
+	bevelSize: 0,
+	bevelOffset: 0,
+	bevelSegments: 1
+  };
+  var mesh2 = new THREE.Mesh( new THREE.ExtrudeGeometry( shape2, extrudeSettings2 ), new THREE.MeshPhongMaterial({
+    color: 0x00AA00,
+	shininess: 200,
+  }));
+  mesh2.position.z = 15;
+  scene.add(mesh2);
+  
+    var shape3 = new THREE.Shape();
+    shape3.moveTo(0,0);
+    shape3.lineTo(0,50);
+    shape3.lineTo(13,50);
+    shape3.lineTo(13,25);
+    shape3.lineTo(47,25);
+    shape3.lineTo(47,50);
+    shape3.lineTo(60,50);
+    shape3.lineTo(60,25);
+	shape3.absarc(70,25,10,Math.PI,Math.PI * 3 / 2, false);
+	shape3.moveTo(70,15);
+	shape3.lineTo(70,0);
+	shape3.lineTo(0,0);
+	
+  var mesh3 = new THREE.Mesh( new THREE.ExtrudeGeometry( shape3, extrudeSettings1), new THREE.MeshPhongMaterial({
+    color: 0x00AA00,
+	shininess: 200,
+  }));
+  mesh3.position.z = 45;
+  scene.add(mesh3);
+  
+  var shape4 = new THREE.Shape();
+  shape4.moveTo(0,0);
+  shape4.lineTo(0,60);
+  shape4.lineTo(30,60);
+  shape4.absarc(30,30,30,Math.PI /2,Math.PI * 3 / 2, true);
+  shape4.lineTo(0,0);
+  
+  var holePath = new THREE.Path();
+  holePath.moveTo(30,30);
+  holePath.absarc(30,30, 11, 0, Math.PI * 2, false);
+  shape4.holes.push(holePath);
+  
+  var extrudeSettings4 = {
+	steps: 1,
+	depth: 15,
+	bevelEnabled: true,
+	bevelThickness: 0,
+	bevelSize: 0,
+	bevelOffset: 0,
+	bevelSegments: 1
+  };
+  var mesh4 = new THREE.Mesh( new THREE.ExtrudeGeometry( shape4, extrudeSettings4), new THREE.MeshPhongMaterial({
+    color: 0x00AA00,
+	shininess: 200,
+  }));
+  mesh4.rotation.x =  -Math.PI /2;
+  mesh4.position.set(70,0,60);
+  scene.add(mesh4);
+  renderer.autoClear = false;
+  
+}
+
+function animate() {
+
+  requestAnimationFrame(animate);
+  render();
+
+}
+
+function render() {
+
+  var WW = window.innerWidth;
+  var HH = window.innerHeight;
+  if(toggle){
+  console.log(count);
+  clearTimeout(TimeOutM);
+  keyM = false;
+    if(count != 50 && keyP == false){
+	    keyP = true;
+	    setTimeout(countPlus,50);
+	}
+	if(count == 50){
+	  clearTimeout(TimeOutP);
+      renderer.clear();
+      renderer.setViewport(0, 0, WW/ 2, HH/ 2);
+      renderer.render(scene, cameraF);
+  
+      renderer.setViewport(0, HH / 2, WW /2, HH / 2);
+      renderer.render(scene, cameraT);     // topview
+  
+      renderer.setViewport(WW/2, 0, WW /2, HH / 2);
+      renderer.render(scene, cameraR);
+	}
+  }
+  else{
+    clearTimeout(TimeOutP);
+    keyP = false;
+	if(count !=1 && keyM == false){
+	    keyM = true;
+	    setTimeout(countMinus,50);
+	  }
+	if(count == 1){
+	  clearTimeout(TimeOutM);
+	   renderer.clear();
+	   renderer.setViewport(0,0, WW/count, HH/count);
+	   renderer.render(scene, camera);
+	}
+	//console.log(count);
+  }
+  
+}
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
+function countPlus(){
+	var WW = window.innerWidth;
+    var HH = window.innerHeight;
+    renderer.clear();
+	renderer.setViewport(WW/2 - WW/count, HH/2 - HH/count, WW/count, HH/count);
+	renderer.render(scene, camera);
+	count++;
+	TimeOutP = setTimeout(countPlus,50);
+}
+function countMinus(){
+  var WW = window.innerWidth;
+  var HH = window.innerHeight;
+    renderer.clear();
+	renderer.setViewport(WW/2 - WW/count, HH/2 - HH/count, WW/count, HH/count);
+	renderer.render(scene, camera);
+	count--;
+	TimeOutM = setTimeout(countMinus,50);
+}
+
+
+
+</script>
+</body>
+</html>
