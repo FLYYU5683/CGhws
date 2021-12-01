@@ -37,28 +37,29 @@ var count = 50;
 var TimeOutM,TimeOutP; 
 var keyP = false;
 var keyM = false;
+var group;
 init();
 animate();
 
 function init() {
-
+  group = new THREE.Group();
   scene = new THREE.Scene();
   
   var light = new THREE.PointLight( 0xffffff,1,1000 );
   light.position.set(130, 50, 100);
   scene.add( light );
   
-  cameraT = new THREE.OrthographicCamera (0,130,0,-60,1,4000);
+  cameraT = new THREE.OrthographicCamera (-10,140,10,-70,1,4000);
   cameraT.position.set (0,100,0);
   cameraT.up.set (0,0,-1); // -Z
   cameraT.lookAt (0,0,0);
 
-  cameraF = new THREE.OrthographicCamera (0,130,50,0, 1,200);
+  cameraF = new THREE.OrthographicCamera (-10,140,60,-10, 1,200);
   cameraF.position.set (0,0,100);
   cameraF.lookAt (0,0,0);
   
-  cameraR = new THREE.OrthographicCamera (60,0,50,0,-200,400);
-  cameraR.position.set (-200,0,0);
+  cameraR = new THREE.OrthographicCamera (-70,10,60,-10,1,400);
+  cameraR.position.set (200,0,0);
   cameraR.lookAt (0,0,0);
   
   camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 10000);
@@ -101,7 +102,6 @@ function init() {
     color: 0x00AA00,
 	shininess: 200,
   }));
-  scene.add(mesh1);
   
     var shape2 = new THREE.Shape();
     shape2.moveTo(0,0);
@@ -131,7 +131,6 @@ function init() {
 	shininess: 200,
   }));
   mesh2.position.z = 15;
-  scene.add(mesh2);
   
     var shape3 = new THREE.Shape();
     shape3.moveTo(0,0);
@@ -152,7 +151,6 @@ function init() {
 	shininess: 200,
   }));
   mesh3.position.z = 45;
-  scene.add(mesh3);
   
   var shape4 = new THREE.Shape();
   shape4.moveTo(0,0);
@@ -181,9 +179,9 @@ function init() {
   }));
   mesh4.rotation.x =  -Math.PI /2;
   mesh4.position.set(70,0,60);
-  scene.add(mesh4);
   renderer.autoClear = false;
-  
+  group.add(mesh1,mesh2,mesh3,mesh4);
+  scene.add(group);
 }
 
 function animate() {
