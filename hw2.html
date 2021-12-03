@@ -11,60 +11,12 @@ body {
 <script src="https://jyunming-chen.github.io/tutsplus/js/KeyboardState.js"></script>
 <script type = "module">
 
-import * as THREE from "https://threejs.org/build/three.module.js";
-import {cameraHUD2} from "./hw2/initHUD.js";
-import {init,obstacle,group,camera, scene, renderer,clock,Last_P,Last_Q} from "./hw2/init.js";
-import {makeRect} from "./hw2/makeRect.js";
-import {Check_Intersect} from "./hw2/Check_Intersect.js";
-import {update,pos,power,angle,reSetPower} from "./hw2/update.js";
-import {check_Collision,IsBCollision,IsCollision} from "./hw2/check_Collision.js";
-import {render} from "./hw2/render.js";
-var backOnce = false;
-
-
-(function() {
-  Math.clamp = function(val,min,max){
-    return Math.min(Math.max(val,min),max);
-    
-  }})();
+import {init} from "./hw2/init.js";
+import {animate} from "./hw2/animate.js";
 
 init();
 animate();
 
-
-function animate() {
-
-  let Rect = makeRect();
-  check_Collision(Rect);
-	
-  camera.position.copy(group.localToWorld(new THREE.Vector3(-60,20,5)));
-  camera.lookAt(group.localToWorld(new THREE.Vector3(10,0,5)));
-
-  if(IsCollision || IsBCollision){
-    reSetPower();
-	console.log("boom");
-	if(!backOnce){
-	  backOnce = true; 
-	  pos.copy(Last_P);
-	}
-    group.position.copy(pos);
-	//group.quaternion.copy(Last_Q);
-    group.rotation.y = angle;
-  }
-  else{
-    backOnce = false;
-    Last_P.copy(group.position);
-	//Last_Q.copy(group.quaternion);
-	group.position.copy(pos);
-    group.rotation.y = angle;	  	
-  }
-  
-  var dt = clock.getDelta();
-  update(dt);
-
-  requestAnimationFrame(animate);
-  render();
-}
 </script>
 </body>
 </html>
