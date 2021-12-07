@@ -1,5 +1,6 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import {IsCollision,IsBCollision} from "./check_Collision.js";
+import {temp} from "./animate.js";
 var keyboard = new KeyboardState();
 var pos = new THREE.Vector3();
 var vel = new THREE.Vector3();
@@ -7,6 +8,7 @@ var force = new THREE.Vector3();
 var power = 0;
 var angle = 0;
 var back = false;
+var col = false
 
 function update(dt) {
   keyboard.update();
@@ -14,6 +16,12 @@ function update(dt) {
   if (vel.length() > 0) {
     angle = 1.5 * Math.PI + Math.atan2(vel.x, vel.z); 
   }
+  /*
+  if(col){
+	  angle = temp;
+	  col = false;
+  }
+  */
 
   if (keyboard.pressed("space") && !back)  
  	  power = 0.1;
@@ -35,13 +43,12 @@ function update(dt) {
   if(power > 0) back = false;
   else back = true;
   
-  
   var angle_thrust = angle;
   if (keyboard.pressed("left"))
     angle_thrust += 0.5;
   if (keyboard.pressed("right"))
     angle_thrust -= 0.5;
-    
+   
   // compute force
 
     var thrust = new THREE.Vector3(1,0,0).multiplyScalar(Math.abs(power)).applyAxisAngle(new THREE.Vector3(0,1,0), angle_thrust);
@@ -65,4 +72,7 @@ function update(dt) {
 function reSetPower(){
 	power = 0;
 }
-export{reSetPower,update,pos,power,angle};
+function setCol(){
+  col = true;	
+}
+export{reSetPower,update,pos,power,angle,setCol};
