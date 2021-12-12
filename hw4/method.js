@@ -1,5 +1,5 @@
 import {camera,scene,renderer,mouseLoc,raycaster,candles} from "./main.js";
-import {pickables} from "Candle.js";
+import {pickables} from "./Candle.js";
 
 function render() {
   renderer.render(scene, camera);
