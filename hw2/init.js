@@ -1,5 +1,7 @@
 import * as THREE from "https://threejs.org/build/three.module.js";
 import {initHUD} from "./initHUD.js";
+import {onWindowResize} from "./onWindowResize.js";
+
 var obstacle = [];
 var group = new THREE.Group();
 var camera, scene, renderer;
@@ -96,11 +98,6 @@ scene.add(obstacle1,obstacle2,obstacle3,obstacle4,obstacle5);
   initHUD();
   renderer.autoClear = false;
 
-}
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 export{obstacle,group,camera, scene, renderer,clock,Last_P,Last_Q};
 export{init};
