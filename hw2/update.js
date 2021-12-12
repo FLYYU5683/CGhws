@@ -9,20 +9,28 @@ var power = 0;
 var angle = 0;
 var back = false;
 var col = false
+var Last_V = new THREE.Vector3();
+
 
 function update(dt) {
   keyboard.update();
+  //console.log(temp);
+ 
+  if(!col){
+    if (vel.length() > 0) {
+      angle = 1.5 * Math.PI + Math.atan2(vel.x, vel.z); 
+    }
+	Last_V.copy(vel);
+	
+  }
+  else{
+	  console.log("=====================================");
+	  angle += 2*(angle - temp);
+	  col = false
+	  vel.copy(Last_V);
+  }
   
-  if (vel.length() > 0) {
-    angle = 1.5 * Math.PI + Math.atan2(vel.x, vel.z); 
-  }
-  /*
-  if(col){
-	  angle = temp;
-	  col = false;
-  }
-  */
-
+  //console.log(Last_V,vel);
   if (keyboard.pressed("space") && !back)  
  	  power = 0.1;
   if (keyboard.pressed("space") && back)
@@ -50,7 +58,7 @@ function update(dt) {
     angle_thrust -= 0.5;
    
   // compute force
-
+    //console.log(angle_thrust);
     var thrust = new THREE.Vector3(1,0,0).multiplyScalar(Math.abs(power)).applyAxisAngle(new THREE.Vector3(0,1,0), angle_thrust);
     force.copy (thrust);
     force.add(vel.clone().multiplyScalar(-2))
