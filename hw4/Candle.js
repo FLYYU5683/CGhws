@@ -2,6 +2,7 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import {scene} from "./main.js";
 var pickables = [];
 class Candle{
+	
     px;
 	pz;
     count;
@@ -40,7 +41,7 @@ class Candle{
       // load a resource
       var texture = loader.load(
       // URL ...
-      'https://i.imgur.com/M2tr5Tm.png?1',
+      'http://i.imgur.com/M2tr5Tm.png?1',
       // onLoad ...
         function(texture) {
         // do something with the texture
@@ -61,7 +62,7 @@ class Candle{
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set (1/3,1/3);
-        texture.offset.set (0,2/3);
+        texture.offset.set (Math.floor(Math.random() * 3),2/3);
         this.candle.add (this.flameMesh);
 	    pickables.push(this.candle);
         scene.add (this.candle);

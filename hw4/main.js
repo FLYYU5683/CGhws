@@ -7,6 +7,7 @@ var candles = [];
 var raycaster;
 var mouseLoc;
 function init() {
+	
   renderer = new THREE.WebGLRenderer({
     antialias: true
   });
@@ -40,6 +41,7 @@ function init() {
   
   //flameInterval = setInterval (Candle[0].textureAnimate, 100);
 }
+
 function animate() {
   requestAnimationFrame(animate);
   render();
@@ -49,5 +51,6 @@ function animate() {
   candles.forEach(function(b){b.flameMesh.lookAt(camera.position.x, 0, camera.position.z);});
   
 }
+
 export{camera, scene, renderer,mouseLoc,raycaster,candles};
 export{init,animate};
