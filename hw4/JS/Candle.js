@@ -62,7 +62,7 @@ class Candle{
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set (1/3,1/3);
-        texture.offset.set (Math.floor(Math.random() * 3),2/3);
+        texture.offset.set (Math.floor(Math.random() * 3)/3,Math.floor(Math.random() * 3)/3);
         this.candle.add (this.flameMesh);
 	    pickables.push(this.candle);
         scene.add (this.candle);
