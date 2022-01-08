@@ -2,7 +2,6 @@ import * as THREE from "https://threejs.org/build/three.module.js";
 import {scene} from "./main.js";
 var pickables = [];
 class Candle{
-	
     px;
 	pz;
     count;
@@ -25,7 +24,7 @@ class Candle{
 		this.spotLight.target = body;
 
 		this.spotLight.castShadow = true;	
-		this.spotLight.penumbra = 0.51;
+		this.spotLight.penumbra = 0.8;
 		this.spotLight.shadow.mapSize.width = 1024;
 		this.spotLight.shadow.mapSize.height = 1024;
 
